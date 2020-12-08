@@ -26,8 +26,10 @@ func validPasswords(data []string) int {
 		alphabetSupported := strings.Split(s[1], ":")[0]
 		passwordString := s[2]
 
-		letterCount := strings.Count(passwordString, alphabetSupported)
-		if letterCount >= minDigits && letterCount <= maxDigits {
+		minWord := string(passwordString[minDigits-1]) == alphabetSupported
+		maxWord := string(passwordString[maxDigits-1]) == alphabetSupported
+
+		if minWord != maxWord {
 			validPasswords++
 		}
 	}
