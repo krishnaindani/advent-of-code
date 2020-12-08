@@ -14,9 +14,14 @@ func main() {
 
 	makeMap := convertSliceToDict(nums)
 
-	num := findNumbersThatSum(makeMap, 2020)
+	_, num1, num2 := findNumbersThatSum(makeMap, 2020)
 
-	fmt.Println("num", num)
+	fmt.Println("twoNumsMultiplication", num1*num2)
+
+	value := findThreeNumbersThatSum(makeMap, 2020)
+
+	fmt.Println("threeNumsMultiplication", value)
+
 }
 
 func readFile() ([]int, error) {
@@ -56,12 +61,23 @@ func convertSliceToDict(nums []int) map[int]int {
 	return m
 }
 
-func findNumbersThatSum(nums map[int]int, target int) int {
+func findNumbersThatSum(nums map[int]int, target int) (bool, int, int) {
 	for k := range nums {
 		find := target - k
 		_, ok := nums[find]
 		if ok {
-			return k * find
+			return true, k, find
+		}
+	}
+	return false, 0, 0
+}
+
+func findThreeNumbersThatSum(nums map[int]int, target int) int {
+	for k := range nums {
+		find := target - k
+		present, num1, num2 := findNumbersThatSum(nums, find)
+		if present {
+			return k * num1 * num2
 		}
 	}
 	return 0
