@@ -7,15 +7,7 @@ import (
 	"strings"
 )
 
-var (
-	mandatoryFields = []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
-	minByr          = 1920
-	maxByr          = 2002
-	minIyr          = 2010
-	maxIyr          = 2020
-	minEyr          = 2020
-	maxEyr          = 2030
-)
+var mandatoryFields = []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
 
 func main() {
 	data := readFile()
@@ -24,6 +16,7 @@ func main() {
 	passports := parsePassport(data)
 	validPassports := 0
 	for _, p := range passports {
+		fmt.Println("p", p)
 		valid := checkValidPassports(p)
 		if valid {
 			validPassports++
@@ -38,6 +31,7 @@ func checkValidPassports(passport string) bool {
 			return false
 		}
 	}
+
 	return true
 }
 
@@ -66,12 +60,4 @@ func readFile() []string {
 	}
 	input = append(input, "")
 	return input
-}
-
-func validateBirthYear(y int) bool {
-	return ((y >= minByr) && (y <= maxByr))
-}
-
-func validateIssueYear(y int) bool {
-	return ((y >= minIyr) && (y <= maxIyr))
 }
