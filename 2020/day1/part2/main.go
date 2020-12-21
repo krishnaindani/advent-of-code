@@ -1,22 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"io"
 	"os"
+	"strconv"
 )
 
 func main() {
-	nums, err := readFile()
+	makeMap, err := readInput()
 	if err != nil {
 		fmt.Println("Err", err)
 	}
-
-	makeMap := convertSliceToDict(nums)
-
-	_, num1, num2 := findNumbersThatSum(makeMap, 2020)
-
-	fmt.Println("twoNumsMultiplication", num1*num2)
 
 	value := findThreeNumbersThatSum(makeMap, 2020)
 
@@ -24,32 +19,18 @@ func main() {
 
 }
 
-func readFile() ([]int, error) {
+func readInput() (map[int]int, error) {
 
-	file, err := os.Open("./data.txt")
+	m := make(map[int]int)
+	file, err := os.Open("./sampledata.txt")
 	if err != nil {
 		return nil, err
 	}
 
-	var perLine int
-	var nums []int
+	scanner := bufio.NewScanner(file)
 
-	for {
-		_, err := fmt.Fscanf(file, "%d\n", &perLine)
-		if err != nil {
-			if err == io.EOF {
-				return nums, nil
-			}
-			return nil, err
-		}
-		nums = append(nums, perLine)
-	}
-}
-
-func convertSliceToDict(nums []int) map[int]int {
-	m := make(map[int]int)
-
-	for _, num := range nums {
+	for scanner.Scan() {
+		num, _ := strconv.Atoi(scanner.Text())
 		_, ok := m[num]
 		if !ok {
 			m[num] = 1
@@ -58,7 +39,7 @@ func convertSliceToDict(nums []int) map[int]int {
 		}
 	}
 
-	return m
+	return m, nil
 }
 
 func findNumbersThatSum(nums map[int]int, target int) (bool, int, int) {
