@@ -51,7 +51,7 @@ func Test_birthYearValidation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := birthYearValidation(tt.args.birthYear); got != tt.want {
+			if got := BirthYear(tt.args.birthYear); got != tt.want {
 				t.Errorf("birthYearValidation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -119,7 +119,7 @@ func Test_heightValidation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := heightValidation(tt.args.height); got != tt.want {
+			if got := Height(tt.args.height); got != tt.want {
 				t.Errorf("heightValidation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -159,7 +159,7 @@ func Test_issueYearValidation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := issueYearValidation(tt.args.issueYear); got != tt.want {
+			if got := IssueYear(tt.args.issueYear); got != tt.want {
 				t.Errorf("issueYearValidation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -199,7 +199,7 @@ func Test_expirationYearValidation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := expirationYearValidation(tt.args.expirationYear); got != tt.want {
+			if got := ExpirationYear(tt.args.expirationYear); got != tt.want {
 				t.Errorf("expirationYearValidation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -232,7 +232,7 @@ func Test_passportIDValidation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := passportIDValidation(tt.args.id); got != tt.want {
+			if got := PassportID(tt.args.id); got != tt.want {
 				t.Errorf("passportIDValidation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -307,7 +307,7 @@ func Test_eyeColorValiadation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := eyeColorValiadation(tt.args.color); got != tt.want {
+			if got := EyeColor(tt.args.color); got != tt.want {
 				t.Errorf("eyeColorValiadation() = %v, want %v", got, tt.want)
 			}
 		})
@@ -347,7 +347,7 @@ func Test_hairColorValidation(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := hairColorValidation(tt.args.color); got != tt.want {
+			if got := HairColor(tt.args.color); got != tt.want {
 				t.Errorf("hairColorValidation() = %v, want %v", got, tt.want)
 			}
 		})
