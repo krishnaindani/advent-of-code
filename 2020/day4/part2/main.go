@@ -10,8 +10,6 @@ import (
 	"github.com/krishnaindani/advent-of-code/2020/day4/part2/validate"
 )
 
-var mandatoryFields = []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
-
 var (
 	birthYear      = "byr"
 	issueYear      = "iyr"
@@ -20,6 +18,8 @@ var (
 	hairColor      = "hcl"
 	eyeColor       = "ecl"
 	passportID     = "pid"
+
+	mandatoryFields = []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
 )
 
 func main() {
@@ -33,7 +33,6 @@ func main() {
 }
 
 func validPassports(passports []string) int {
-	fmt.Println("lenght", len(passports))
 	var validPassports int
 	for _, p := range passports {
 		validCheck := checkMandatoryFields(p)
