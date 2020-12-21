@@ -4,9 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/krishnaindani/advent-of-code/2020/day4/part2/validate"
 )
 
 var mandatoryFields = []string{"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"}
@@ -35,7 +36,7 @@ func validPassports(passports []string) int {
 	fmt.Println("lenght", len(passports))
 	var validPassports int
 	for _, p := range passports {
-		validCheck := validPassportFieldContains(p)
+		validCheck := checkMandatoryFields(p)
 		if validCheck {
 			valid := validPassport(p)
 			if valid {
@@ -46,7 +47,7 @@ func validPassports(passports []string) int {
 	return validPassports
 }
 
-func validPassportFieldContains(passport string) bool {
+func checkMandatoryFields(passport string) bool {
 	for _, field := range mandatoryFields {
 		if !strings.Contains(passport, field) {
 			return false
@@ -65,39 +66,39 @@ func validPassport(passport string) bool {
 			switch field {
 			case birthYear:
 				y, _ := strconv.Atoi(value)
-				valid := birthYearValidation(y)
+				valid := validate.BirthYear(y)
 				if !valid {
 					return false
 				}
 			case issueYear:
 				y, _ := strconv.Atoi(value)
-				valid := issueYearValidation(y)
+				valid := validate.IssueYear(y)
 				if !valid {
 					return false
 				}
 			case expirationyear:
 				y, _ := strconv.Atoi(value)
-				valid := expirationYearValidation(y)
+				valid := validate.ExpirationYear(y)
 				if !valid {
 					return false
 				}
 			case height:
-				valid := heightValidation(value)
+				valid := validate.Height(value)
 				if !valid {
 					return false
 				}
 			case hairColor:
-				valid := hairColorValidation(value)
+				valid := validate.HairColor(value)
 				if !valid {
 					return false
 				}
 			case eyeColor:
-				valid := eyeColorValiadation(value)
+				valid := validate.EyeColor(value)
 				if !valid {
 					return false
 				}
 			case passportID:
-				valid := passportIDValidation(value)
+				valid := validate.PassportID(value)
 				if !valid {
 					return false
 				}
@@ -133,47 +134,4 @@ func readFile() []string {
 	}
 	input = append(input, "")
 	return input
-}
-
-func birthYearValidation(birthYear int) bool {
-	return ((birthYear >= 1920) && (birthYear <= 2002))
-}
-
-func issueYearValidation(issueYear int) bool {
-	return ((issueYear >= 2010) && (issueYear <= 2020))
-}
-
-func expirationYearValidation(expirationYear int) bool {
-	return ((expirationYear >= 2020) && (expirationYear <= 2030))
-}
-
-func eyeColorValiadation(color string) bool {
-
-	return (color == "amb") || (color == "blu") || (color == "gry") ||
-		(color == "brn") || (color == "hzl") || (color == "oth") ||
-		(color == "grn")
-}
-
-func passportIDValidation(id string) bool {
-	return len(id) == 9
-}
-
-func hairColorValidation(color string) bool {
-	match, _ := regexp.MatchString("^#([0-9a-f]{6})", color)
-	return match
-}
-
-func heightValidation(height string) bool {
-
-	if strings.Contains(height, "cm") {
-		value, _ := strconv.Atoi(strings.Split(height, "cm")[0])
-		return (value >= 150) && (value <= 193)
-	}
-
-	if strings.Contains(height, "in") {
-		value, _ := strconv.Atoi(strings.Split(height, "in")[0])
-		return (value >= 59) && (value <= 76)
-	}
-
-	return false
 }
