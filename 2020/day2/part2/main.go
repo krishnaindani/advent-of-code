@@ -11,7 +11,7 @@ import (
 func main() {
 	input := readFile()
 
-	fmt.Println(validPasswords(input))
+	fmt.Println("Number of valid passwords:", validPasswords(input))
 }
 
 func validPasswords(data []string) int {
@@ -39,7 +39,7 @@ func validPassword(password string) bool {
 	minWord := string(passwordString[minDigits-1]) == alphabetSupported
 	maxWord := string(passwordString[maxDigits-1]) == alphabetSupported
 
-	if minWord != maxWord {
+	if minWord != maxWord == true {
 		return true
 	}
 
@@ -49,7 +49,7 @@ func validPassword(password string) bool {
 func readFile() []string {
 	var input []string
 
-	file, _ := os.Open("./sampledata.txt")
+	file, _ := os.Open("./data.txt")
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
