@@ -13,59 +13,60 @@ var (
 
 	right = "r"
 	left  = "l"
-
-	r = "right"
-	l = "left"
 )
 
 func main() {
 	seats := readInput()
+	allSeats := make(map[int]bool)
 
-	var best int
 	//first calculate the ro
 	for _, seat := range seats {
 		rowNum, seatNum := getSeatNumber(seat)
 		id := (rowNum*8 + seatNum)
-		fmt.Printf("Seat: %s, seatNum: %v\n", seat, id)
-		if id > best {
-			best = id
+		allSeats[id] = true
+	}
+	var mySeat int
+	fmt.Println("allSeats", allSeats)
+	for seatID := range allSeats {
+		if allSeats[seatID] && allSeats[seatID+2] && !allSeats[seatID+1] {
+			mySeat = seatID + 1
+			break
 		}
 	}
-	fmt.Println("bestSeat", best)
+
+	fmt.Println("mySeat", mySeat)
 }
 
 func getSeatNumber(seat string) (int, int) {
 	s := strings.Split(strings.ToLower(seat), "")
 	rowNumbers := s[0 : len(s)-3]
-	seatNumbers := s[len(s)-3:]
+	seatNumbers := s[7:]
 
 	return getColumnNumber(rowNumbers), getSeatPosition(seatNumbers)
 }
 
 func getColumnNumber(seat []string) int {
 
-	min := 0
-	max := 127
+	columnLeft := 0
+	columnRight := 127
 
-	for i, rune := range seat {
-
-		median := (min + max) / 2
+	for i, rune := range seat[0:6] {
 
 		if string(rune) == front {
-			max = median - 1
+			columnRight -= (columnRight - columnLeft + 1) / 2
 		} else if string(rune) == back {
-			min = median + 1
+			columnLeft += (columnRight - columnLeft + 1) / 2
 		}
 
 		if i == 6 {
 			if string(rune) == front {
-				return min
+				return columnLeft
 			}
 		}
 
 	}
 
-	return max
+	return columnRight
 
 }
 

@@ -125,7 +125,7 @@ func parsePassport(passports []string) []string {
 func readFile() []string {
 	var input []string
 
-	file, _ := os.Open("./data.txt")
+	file, _ := os.Open("./sampledata.txt")
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {

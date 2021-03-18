@@ -22,7 +22,7 @@ func main() {
 func readInput() (map[int]int, error) {
 
 	m := make(map[int]int)
-	file, err := os.Open("./sampledata.txt")
+	file, err := os.Open("./data.txt")
 	if err != nil {
 		return nil, err
 	}
@@ -58,6 +58,7 @@ func findThreeNumbersThatSum(nums map[int]int, target int) int {
 		find := target - k
 		present, num1, num2 := findNumbersThatSum(nums, find)
 		if present {
+			fmt.Printf("Num1: %d\nNum2: %d\nNum3: %d\n", k, num1, num2)
 			return k * num1 * num2
 		}
 	}

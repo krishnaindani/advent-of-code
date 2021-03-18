@@ -13,8 +13,8 @@ func main() {
 		fmt.Println("Err", err)
 	}
 
-	_, num1, num2 := findNumbersThatSum(makeMap, 2020)
-
+	num1, num2 := findNumbersThatSum(makeMap, 2020)
+	fmt.Printf("Num1: %d, Num2: %d\n", num1, num2)
 	fmt.Println("twoNumsMultiplication", num1*num2)
 
 }
@@ -22,7 +22,7 @@ func main() {
 func readInput() (map[int]int, error) {
 
 	m := make(map[int]int)
-	file, err := os.Open("./sampledata.txt")
+	file, err := os.Open("./data.txt")
 	if err != nil {
 		return nil, err
 	}
@@ -42,13 +42,13 @@ func readInput() (map[int]int, error) {
 	return m, nil
 }
 
-func findNumbersThatSum(nums map[int]int, target int) (bool, int, int) {
+func findNumbersThatSum(nums map[int]int, target int) (int, int) {
 	for k := range nums {
 		find := target - k
 		_, ok := nums[find]
 		if ok {
-			return true, k, find
+			return k, find
 		}
 	}
-	return false, 0, 0
+	return 0, 0
 }
