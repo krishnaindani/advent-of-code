@@ -13,9 +13,6 @@ var (
 
 	right = "r"
 	left  = "l"
-
-	r = "right"
-	l = "left"
 )
 
 func main() {
@@ -24,9 +21,8 @@ func main() {
 	var best int
 	//first calculate the ro
 	for _, seat := range seats {
-		rowNum, seatNum := getSeatNumber(seat)
-		id := (rowNum*8 + seatNum)
-		fmt.Printf("Seat: %s, seatNum: %v\n", seat, id)
+		rowNum, seatNum := getSeatNumber(strings.ToLower(seat))
+		id := rowNum*8 + seatNum
 		if id > best {
 			best = id
 		}
@@ -35,55 +31,44 @@ func main() {
 }
 
 func getSeatNumber(seat string) (int, int) {
-	s := strings.Split(strings.ToLower(seat), "")
-	rowNumbers := s[0 : len(s)-3]
-	seatNumbers := s[len(s)-3:]
-
-	return getColumnNumber(rowNumbers), getSeatPosition(seatNumbers)
+	return getColumnNumberV2(seat[0:7]), getSeatPositionV2(seat[7:10])
 }
 
-func getColumnNumber(seat []string) int {
+func getColumnNumberV2(seat string) int {
 
-	min := 0
-	max := 127
+	frontRow, backRow := 0, 127
 
-	for i, rune := range seat {
-
-		median := (min + max) / 2
-
-		if string(rune) == front {
-			max = median - 1
-		} else if string(rune) == back {
-			min = median + 1
-		}
-
-		if i == 6 {
-			if string(rune) == front {
-				return min
+	for i, char := range seat {
+		if string(char) == front {
+			backRow -= (backRow - frontRow + 1) / 2
+			if i == 6 {
+				return frontRow
+			}
+		} else if string(char) == back {
+			frontRow += (backRow - frontRow + 1) / 2
+			if i == 6 {
+				return backRow
 			}
 		}
 
 	}
-
-	return max
-
+	return 0
 }
 
-func getSeatPosition(seat []string) int {
-
+func getSeatPositionV2(seat string) int {
 	leftSeat := 0
 	rightSeat := 7
 
-	for i, rune := range seat {
+	for i, char := range seat {
 
-		if string(rune) == left {
+		if string(char) == left {
 			rightSeat -= (rightSeat - leftSeat + 1) / 2
-		} else if string(rune) == right {
+		} else if string(char) == right {
 			leftSeat += (rightSeat - leftSeat + 1) / 2
 		}
 
 		if i == 2 {
-			if string(rune) == left {
+			if string(char) == left {
 				return leftSeat
 			}
 		}
