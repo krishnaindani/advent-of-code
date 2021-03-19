@@ -13,7 +13,7 @@ import (
 var (
 	birthYear      = "byr"
 	issueYear      = "iyr"
-	expirationyear = "eyr"
+	expirationYear = "eyr"
 	height         = "hgt"
 	hairColor      = "hcl"
 	eyeColor       = "ecl"
@@ -35,10 +35,8 @@ func main() {
 func validPassports(passports []string) int {
 	var validPassports int
 	for _, p := range passports {
-		validCheck := checkMandatoryFields(p)
-		if validCheck {
-			valid := validPassport(p)
-			if valid {
+		if checkMandatoryFields(p) {
+			if validPassport(p) {
 				validPassports++
 			}
 		}
@@ -58,8 +56,11 @@ func checkMandatoryFields(passport string) bool {
 func validPassport(passport string) bool {
 	passportFields := strings.Split(passport, " ")
 	for _, f := range passportFields {
-		fields := strings.Split(f, ":")
-		if len(f) > 2 {
+		//Split the fields here, for ex pid:021572410 as [pid, 021572410]
+		//we need to check length because, there is space at the end we
+		//are adding to while parsing passports
+		if len(f) > 0 {
+			fields := strings.Split(f, ":")
 			field := fields[0]
 			value := fields[1]
 			switch field {
@@ -75,7 +76,7 @@ func validPassport(passport string) bool {
 				if !valid {
 					return false
 				}
-			case expirationyear:
+			case expirationYear:
 				y, _ := strconv.Atoi(value)
 				valid := validate.ExpirationYear(y)
 				if !valid {
@@ -101,6 +102,7 @@ func validPassport(passport string) bool {
 				if !valid {
 					return false
 				}
+
 			}
 		}
 	}
@@ -108,8 +110,8 @@ func validPassport(passport string) bool {
 }
 
 func parsePassport(passports []string) []string {
-	parsedPassports := []string{}
-	passport := ""
+	var parsedPassports []string
+	var passport string
 	for _, p := range passports {
 		if len(p) > 0 {
 			passport += p
@@ -125,7 +127,7 @@ func parsePassport(passports []string) []string {
 func readFile() []string {
 	var input []string
 
-	file, _ := os.Open("./sampledata.txt")
+	file, _ := os.Open("./data.txt")
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {

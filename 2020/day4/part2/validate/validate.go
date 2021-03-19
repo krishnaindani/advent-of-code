@@ -8,17 +8,17 @@ import (
 
 //BirthYear ...
 func BirthYear(birthYear int) bool {
-	return ((birthYear >= 1920) && (birthYear <= 2002))
+	return (birthYear >= 1920) && (birthYear <= 2002)
 }
 
 //IssueYear ...
 func IssueYear(issueYear int) bool {
-	return ((issueYear >= 2010) && (issueYear <= 2020))
+	return (issueYear >= 2010) && (issueYear <= 2020)
 }
 
 //ExpirationYear ...
 func ExpirationYear(expirationYear int) bool {
-	return ((expirationYear >= 2020) && (expirationYear <= 2030))
+	return (expirationYear >= 2020) && (expirationYear <= 2030)
 }
 
 //EyeColor ...

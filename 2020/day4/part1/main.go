@@ -22,8 +22,7 @@ func main() {
 func validPassports(passports []string) int {
 	var validPassports int
 	for _, p := range passports {
-		valid := validPassport(p)
-		if valid {
+		if validPassport(p) {
 			validPassports++
 		}
 	}
@@ -40,11 +39,12 @@ func validPassport(passport string) bool {
 }
 
 func parsePassport(passports []string) []string {
-	parsedPassports := []string{}
-	passport := ""
+	var parsedPassports []string
+	var passport string
 	for _, p := range passports {
 		if len(p) > 0 {
 			passport += p
+			passport += " "
 		} else {
 			parsedPassports = append(parsedPassports, passport)
 			passport = ""
@@ -56,7 +56,10 @@ func parsePassport(passports []string) []string {
 func readFile() []string {
 	var input []string
 
-	file, _ := os.Open("./sampleData.txt")
+	file, err := os.Open("./sampledata.txt")
+	if err != nil {
+		panic(err)
+	}
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
