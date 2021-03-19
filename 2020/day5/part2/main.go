@@ -17,74 +17,65 @@ var (
 
 func main() {
 	seats := readInput()
-	allSeats := make(map[int]bool)
 
-	//first calculate the ro
+	allSeats := make(map[int]bool)
 	for _, seat := range seats {
-		rowNum, seatNum := getSeatNumber(seat)
-		id := (rowNum*8 + seatNum)
+		rowNum, seatNum := getSeatNumber(strings.ToLower(seat))
+		id := rowNum*8 + seatNum
 		allSeats[id] = true
 	}
+
 	var mySeat int
-	fmt.Println("allSeats", allSeats)
-	for seatID := range allSeats {
-		if allSeats[seatID] && allSeats[seatID+2] && !allSeats[seatID+1] {
-			mySeat = seatID + 1
+	for k := range allSeats {
+		if allSeats[k] && allSeats[k+2] && !allSeats[k+1] {
+			mySeat = k + 1
 			break
 		}
 	}
+	fmt.Println("allSeats", allSeats)
+	fmt.Println("My Seat:", mySeat)
 
-	fmt.Println("mySeat", mySeat)
 }
 
 func getSeatNumber(seat string) (int, int) {
-	s := strings.Split(strings.ToLower(seat), "")
-	rowNumbers := s[0 : len(s)-3]
-	seatNumbers := s[7:]
-
-	return getColumnNumber(rowNumbers), getSeatPosition(seatNumbers)
+	return getColumnNumberV2(seat[0:7]), getSeatPositionV2(seat[7:10])
 }
 
-func getColumnNumber(seat []string) int {
+func getColumnNumberV2(seat string) int {
 
-	columnLeft := 0
-	columnRight := 127
+	frontRow, backRow := 0, 127
 
-	for i, rune := range seat[0:6] {
-
-		if string(rune) == front {
-			columnRight -= (columnRight - columnLeft + 1) / 2
-		} else if string(rune) == back {
-			columnLeft += (columnRight - columnLeft + 1) / 2
-		}
-
-		if i == 6 {
-			if string(rune) == front {
-				return columnLeft
+	for i, char := range seat {
+		if string(char) == front {
+			backRow -= (backRow - frontRow + 1) / 2
+			if i == 6 {
+				return frontRow
+			}
+		} else if string(char) == back {
+			frontRow += (backRow - frontRow + 1) / 2
+			if i == 6 {
+				return backRow
 			}
 		}
 
 	}
-
-	return columnRight
-
+	return 0
 }
 
-func getSeatPosition(seat []string) int {
-
+func getSeatPositionV2(seat string) int {
 	leftSeat := 0
 	rightSeat := 7
 
-	for i, rune := range seat {
+	for i, char := range seat {
 
-		if string(rune) == left {
+		if string(char) == left {
 			rightSeat -= (rightSeat - leftSeat + 1) / 2
-		} else if string(rune) == right {
+		} else if string(char) == right {
 			leftSeat += (rightSeat - leftSeat + 1) / 2
 		}
 
 		if i == 2 {
-			if string(rune) == left {
+			if string(char) == left {
 				return leftSeat
 			}
 		}

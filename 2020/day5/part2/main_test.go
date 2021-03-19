@@ -1,10 +1,11 @@
 package main
 
 import (
+	"strings"
 	"testing"
 )
 
-func Test_getColumnNumber(t *testing.T) {
+func Test_getColumnNumberV2(t *testing.T) {
 	type args struct {
 		seat string
 	}
@@ -14,37 +15,37 @@ func Test_getColumnNumber(t *testing.T) {
 		want int
 	}{
 		{
-			name: "happy path",
+			name: "test one",
 			args: args{
-				seat: "fbfbbff",
-			},
-			want: 44,
-		},
-		{
-			name: "second seat",
-			args: args{
-				seat: "bfffbbf",
+				seat: "BFFFBBF",
 			},
 			want: 70,
 		},
 		{
-			name: "third seat",
+			name: "test two",
 			args: args{
-				seat: "fffbbbf",
+				seat: "FFFBBBF",
 			},
 			want: 14,
+		},
+		{
+			name: "test three",
+			args: args{
+				seat: "BBFFBBF",
+			},
+			want: 102,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getColumnNumber(tt.args.seat); got != tt.want {
-				t.Errorf("getColumnNumber() = %v, want %v", got, tt.want)
+			if got := getColumnNumberV2(strings.ToLower(tt.args.seat)); got != tt.want {
+				t.Errorf("getColumnNumberV2() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func Test_getSeatPosition(t *testing.T) {
+func Test_getSeatPositionV2(t *testing.T) {
 	type args struct {
 		seat string
 	}
@@ -54,31 +55,33 @@ func Test_getSeatPosition(t *testing.T) {
 		want int
 	}{
 		{
-			name: "happy path",
+			name: "test one",
 			args: args{
-				seat: "rlr",
-			},
-			want: 5,
-		},
-		{
-			name: "second seat",
-			args: args{
-				seat: "rrr",
+				seat: "RRR",
 			},
 			want: 7,
 		},
+
 		{
-			name: "third seat",
+			name: "test two",
 			args: args{
-				seat: "rll",
+				seat: "RLL",
 			},
 			want: 4,
+		},
+
+		{
+			name: "test three",
+			args: args{
+				seat: "RLR",
+			},
+			want: 5,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getSeatPosition(tt.args.seat); got != tt.want {
-				t.Errorf("getSeatPosition() = %v, want %v", got, tt.want)
+			if got := getSeatPositionV2(strings.ToLower(tt.args.seat)); got != tt.want {
+				t.Errorf("getSeatPositionV2() = %v, want %v", got, tt.want)
 			}
 		})
 	}
