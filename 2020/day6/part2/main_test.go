@@ -73,18 +73,32 @@ func Test_getState(t *testing.T) {
 			want: true,
 		},
 		{
-			name: "test one",
+			name: "test two",
 			args: args{
 				states: []bool{true, true, false},
 			},
 			want: false,
 		},
 		{
-			name: "test one",
+			name: "test three",
 			args: args{
 				states: []bool{true, false, false},
 			},
 			want: false,
+		},
+		{
+			name: "test four",
+			args: args{
+				states: []bool{false},
+			},
+			want: false,
+		},
+		{
+			name: "test five",
+			args: args{
+				states: []bool{true},
+			},
+			want: true,
 		},
 	}
 	for _, tt := range tests {
