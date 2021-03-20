@@ -9,7 +9,6 @@ import (
 func main() {
 	data := readInput()
 	parsedData := parseInput(data)
-	fmt.Println("parsedData", parsedData)
 	allQuestionsAnswered := getQuestionsAnswered(parsedData)
 
 	fmt.Println("Questions answered by all group:", allQuestionsAnswered)
