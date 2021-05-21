@@ -10,7 +10,6 @@ import (
 func main() {
 
 	input := readInput()
-	fmt.Println("input", input)
 
 	fmt.Println(getNumberNotASumOfTwo(input, 25))
 }
@@ -40,12 +39,10 @@ func getNumberNotASumOfTwo(nums []int, preamble int) int {
 func isNumberSumOfTwo(numsMap map[int]bool, num int) bool {
 
 	for k, _ := range numsMap {
-		fmt.Println("num", num, "numMap", numsMap)
 		numToFind := num - k
 		if numToFind == k {
 			continue
 		}
-		fmt.Println("k", k, "numToFind", numToFind)
 		if _, ok := numsMap[numToFind]; ok {
 			return true
 		}
