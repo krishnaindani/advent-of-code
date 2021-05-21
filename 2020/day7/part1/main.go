@@ -98,11 +98,16 @@ func getNumberOfBagsThatContainsGivenType(bags bag, bagName string) int {
 	var count int
 
 	for _, v := range bags.data {
-		_ = v
+		_, ok := v.contains[colorToFind]
+		if ok {
+			count++
+		} else if len(v.contains) != 0 {
+
+		}
 	}
 	return count
 }
 
-func isBagPresent() {
-
+func isBagPresent(bagStore map[string]int, color string) bool {
+	return false
 }
