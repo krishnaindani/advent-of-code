@@ -25,7 +25,6 @@ func getNumberNotASumOfTwo(nums []int, preamble int) int {
 
 	for i := preamble; i < len(nums); i++ {
 		if !isNumberSumOfTwo(preambleMap, nums[i]) {
-
 			return findContiguousSubArraySum(nums, nums[i])
 		}
 		delete(preambleMap, nums[currentNumIndex])
