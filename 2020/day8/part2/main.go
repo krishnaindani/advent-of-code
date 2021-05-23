@@ -17,7 +17,6 @@ const (
 type instruction struct {
 	operation string
 	value     int
-	visited   bool
 }
 
 func main() {
@@ -28,78 +27,63 @@ func main() {
 }
 
 func getValueBeforeInfiniteLoopStarts(instructions []instruction) int {
-	var accumulator int
 
-	index := 0
+	for i := range instructions {
 
-	for !instructions[index].visited && index < len(instructions) {
-		fmt.Println("index", index, "instructions", instructions, "accumulator", accumulator)
-		switch instructions[index].operation {
-		case accumulate:
-			accumulator += instructions[index].value
-			instructions[index].visited = true
-			index++
+		//create the copy each time
+		instructionsCopy := make([]instruction, len(instructions))
+		copy(instructionsCopy, instructions)
+
+		switch instructions[i].operation {
 		case jump:
-			v, ok := canBreakInfiniteLoop(instructions, index, jump, accumulator)
-			if ok {
-				return v
-			}
-			instructions[index].visited = true
-			index += instructions[index].value
+			instructionsCopy[i].operation = noOperation
 		case noOperation:
-			v, ok := canBreakInfiniteLoop(instructions, index, noOperation, accumulator)
-			if ok {
-				return v
-			}
-			instructions[index].visited = true
-			index++
+			instructionsCopy[i].operation = jump
+		case accumulate:
 			continue
 		}
+
+		//will check if it is infinite loop or not
+		if v, ok := isInfiniteLoop(instructionsCopy); !ok {
+			return v
+		}
+
 	}
 
-	return accumulator
+	return -1
 }
 
-func canBreakInfiniteLoop(instructionsCopy []instruction,
-	index int, operationType string, accumulator int) (int, bool) {
+func isInfiniteLoop(instructions []instruction) (int, bool) {
 
-	instructions := make([]instruction, len(instructionsCopy))
-	copy(instructions, instructionsCopy)
-
-	if instructions[index].operation == jump {
-		instructions[index].operation = noOperation
-	} else if instructions[index].operation == noOperation {
-		instructions[index].operation = jump
-	}
+	visited := map[int]bool{}
+	var accumulator int
+	index := 0
 
 	for index < len(instructions) {
-		fmt.Println("from loop index", index, "instructions", instructions, "accumulator", accumulator)
-		if !instructions[index].visited {
-			return 0, false
+
+		if visited[index] {
+			return 0, true
 		}
+
 		switch instructions[index].operation {
 		case accumulate:
 			accumulator += instructions[index].value
-			instructions[index].visited = true
+			visited[index] = true
 			index++
 		case jump:
-			instructions[index].visited = true
+			visited[index] = true
 			index += instructions[index].value
 		case noOperation:
-			instructions[index].visited = true
+			visited[index] = true
 			index++
 		}
 	}
 
-	if index == len(instructions) {
-		return accumulator, true
-	}
-
-	return 0, false
+	return accumulator, false
 }
 
 func readInput() []instruction {
-	f, _ := os.Open("./sampleData.txt")
+	f, _ := os.Open("./data.txt")
 
 	var result []instruction
 	scanner := bufio.NewScanner(f)
@@ -109,7 +93,6 @@ func readInput() []instruction {
 		result = append(result, instruction{
 			operation: line[0],
 			value:     arg,
-			visited:   false,
 		})
 	}
 
