@@ -36,7 +36,7 @@ func getValueBeforeInfiniteLoopStarts(instructions []instruction) int {
 	for !visited[index] {
 
 		//is already visited
-		if _, ok := visited[index]; ok {
+		if visited[index] {
 			return accumulator
 		}
 
