@@ -17,7 +17,6 @@ const (
 type instruction struct {
 	operation string
 	value     int
-	visited   bool
 }
 
 func main() {
@@ -32,20 +31,26 @@ func getValueBeforeInfiniteLoopStarts(instructions []instruction) int {
 
 	index := 0
 
-	for !instructions[index].visited {
+	visited := map[int]bool{}
+
+	for !visited[index] {
+
+		//is already visited
+		if _, ok := visited[index]; ok {
+			return accumulator
+		}
 
 		switch instructions[index].operation {
 		case accumulate:
 			accumulator += instructions[index].value
-			instructions[index].visited = true
+			visited[index] = true
 			index++
 		case jump:
-			instructions[index].visited = true
+			visited[index] = true
 			index += instructions[index].value
 		case noOperation:
-			instructions[index].visited = true
+			visited[index] = true
 			index++
-			continue
 		}
 	}
 
@@ -63,7 +68,6 @@ func readInput() []instruction {
 		result = append(result, instruction{
 			operation: line[0],
 			value:     arg,
-			visited:   false,
 		})
 	}
 
