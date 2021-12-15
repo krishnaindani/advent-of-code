@@ -53,7 +53,7 @@ func readInput() ([]string, []int, error) {
 	var directions []string
 	var angle []int
 
-	file, err := os.Open("./data.txt")
+	file, err := os.Open("./dcata.txt")
 	if err != nil {
 		return nil, nil, err
 	}
