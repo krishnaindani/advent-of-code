@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -16,33 +15,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sort.Ints(nums1)
-	sort.Ints(nums2)
-
-	totalDistance := getTotalDistance(nums1, nums2)
+	totalDistance := getSimilarityScore(nums1, nums2)
 	fmt.Println("total distance", totalDistance)
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
+func getSimilarityScore(nums1, nums2 map[int]int) int {
+	score := 0
 
-func getTotalDistance(nums1, nums2 []int) int {
-	distance := 0
-
-	for i := range nums1 {
-		distance += abs(nums1[i] - nums2[i])
+	for k, v := range nums1 {
+		frequency, _ := nums2[k]
+		score += k * v * frequency
 	}
 
-	return distance
+	return score
 }
 
-func readInput() ([]int, []int, error) {
+func readInput() (map[int]int, map[int]int, error) {
 
-	first, second := make([]int, 0), make([]int, 0)
+	first, second := make(map[int]int), make(map[int]int)
 
 	file, err := os.Open("./data.txt")
 	if err != nil {
@@ -62,8 +52,8 @@ func readInput() ([]int, []int, error) {
 		value := strings.Split(scanner.Text(), " ")
 		a, _ := strconv.Atoi(value[0])
 		b, _ := strconv.Atoi(value[len(value)-1])
-		first = append(first, a)
-		second = append(second, b)
+		first[a] += 1
+		second[b] += 1
 	}
 
 	return first, second, nil
