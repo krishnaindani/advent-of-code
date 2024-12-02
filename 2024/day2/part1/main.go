@@ -25,7 +25,7 @@ func getSafeReports(input [][]int) int {
 	count := 0
 
 	for _, row := range input {
-		if (isSortedAscending(row) || isSortedDescending(row)) && checkDiff(row) {
+		if isReportSafe(row) {
 			count += 1
 		}
 	}
@@ -33,48 +33,32 @@ func getSafeReports(input [][]int) int {
 	return count
 }
 
-func isSortedAscending(nums []int) bool {
-	last := nums[0]
+func isReportSafe(report []int) bool {
 
-	for i := 1; i < len(nums); i++ {
-		if last >= nums[i] {
+	flagIncrease, flagDecrease := false, false
+
+	for i := 1; i < len(report); i++ {
+		v := report[i] - report[i-1]
+
+		if v > 0 {
+			flagIncrease = true
+		} else if v < 0 {
+			flagDecrease = true
+		} else {
 			return false
 		}
-		last = nums[i]
-	}
-	return true
-}
 
-func isSortedDescending(nums []int) bool {
-	last := nums[0]
-
-	for i := 1; i < len(nums); i++ {
-		if last <= nums[i] {
+		if flagIncrease && flagDecrease {
 			return false
 		}
-		last = nums[i]
-	}
-	return true
-}
 
-func checkDiff(nums []int) bool {
-	last := nums[0]
-
-	for i := 1; i < len(nums); i++ {
-		v := abs(nums[i] - last)
-		if !(v >= 1 && v <= 3) {
+		if v > 3 || v < -3 {
 			return false
 		}
-		last = nums[i]
-	}
-	return true
-}
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
 	}
-	return x
+
+	return true
 }
 
 func readInput() ([][]int, error) {
