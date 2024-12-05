@@ -22,12 +22,41 @@ func getScore(pages, rules [][]int) int {
 	score := 0
 
 	for _, page := range pages {
-		if isOrdered(rules, page) {
-			score += page[len(page)/2]
+		if !isOrdered(rules, page) {
+			newPage := fixOrder(rules, page)
+			score += newPage[len(newPage)/2]
 		}
 	}
 
 	return score
+}
+
+func fixOrder(rules [][]int, page []int) []int {
+	state := false
+	numToIndex := make(map[int]int)
+
+	for i, p := range page {
+		numToIndex[p] = i
+	}
+
+top:
+	for state != true {
+		for _, rule := range rules {
+			x, y := rule[0], rule[1]
+			v1, ok1 := numToIndex[x]
+			v2, ok2 := numToIndex[y]
+			if ok1 && ok2 && v1 > v2 {
+				page[v1], page[v2] = page[v2], page[v1]
+				numToIndex[page[v1]], numToIndex[page[v2]] = numToIndex[page[v2]], numToIndex[page[v1]]
+				if isOrdered(rules, page) {
+					state = true
+					break top
+				}
+			}
+		}
+	}
+
+	return page
 }
 
 func isOrdered(rules [][]int, page []int) bool {
