@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -18,7 +19,7 @@ func main() {
 	fmt.Println("score: ", getScore(pages, rules))
 }
 
-func getScore(pages, rules [][]int) int {
+func getScore(pages [][]int, rules map[int]map[int]struct{}) int {
 	score := 0
 
 	for _, page := range pages {
@@ -31,60 +32,47 @@ func getScore(pages, rules [][]int) int {
 	return score
 }
 
-func fixOrder(rules [][]int, page []int) []int {
-	state := false
-	numToIndex := make(map[int]int)
+func fixOrder(rules map[int]map[int]struct{}, page []int) []int {
 
-	for i, p := range page {
-		numToIndex[p] = i
-	}
+	slices.SortFunc(page, func(a, b int) int {
 
-top:
-	for state != true {
-		for _, rule := range rules {
-			x, y := rule[0], rule[1]
-			v1, ok1 := numToIndex[x]
-			v2, ok2 := numToIndex[y]
-			if ok1 && ok2 && v1 > v2 {
-				page[v1], page[v2] = page[v2], page[v1]
-				numToIndex[page[v1]], numToIndex[page[v2]] = numToIndex[page[v2]], numToIndex[page[v1]]
-				if isOrdered(rules, page) {
-					state = true
-					break top
-				}
-			}
+		if _, ok := rules[a][b]; ok {
+			return -1
 		}
-	}
+
+		if _, ok := rules[b][a]; !ok {
+			return 1
+		}
+
+		return 0
+	})
 
 	return page
 }
 
-func isOrdered(rules [][]int, page []int) bool {
+func isOrdered(rules map[int]map[int]struct{}, page []int) bool {
 
-	numToIndex := make(map[int]int)
+	n := len(page)
 
-	for i, p := range page {
-		numToIndex[p] = i
-	}
-
-	for _, rule := range rules {
-		x, y := rule[0], rule[1]
-		v1, exists := numToIndex[x]
-		v2, exists2 := numToIndex[y]
-		if exists && exists2 && (v1 > v2) {
-			return false
+	for i := 0; i < n; i++ {
+		for j := i + 1; j < n; j++ {
+			char1 := page[i]
+			char2 := page[j]
+			if _, ok := rules[char2][char1]; ok {
+				return false
+			}
 		}
 	}
 
 	return true
 }
 
-func readInput() ([][]int, [][]int, error) {
+func readInput() (map[int]map[int]struct{}, [][]int, error) {
 
-	rules := make([][]int, 0)
+	rulesMap := make(map[int]map[int]struct{})
 	pages := make([][]int, 0)
 
-	file, err := os.Open("data.txt")
+	file, err := os.Open("sampleData.txt")
 	if err != nil {
 		fmt.Printf("error opening file: %v\n", err)
 		return nil, nil, err
@@ -112,7 +100,10 @@ func readInput() ([][]int, [][]int, error) {
 			element := strings.Split(line, "|")
 			num1, _ := strconv.Atoi(element[0])
 			nums2, _ := strconv.Atoi(element[1])
-			rules = append(rules, []int{num1, nums2})
+			if _, ok := rulesMap[num1]; !ok {
+				rulesMap[num1] = make(map[int]struct{})
+			}
+			rulesMap[num1][nums2] = struct{}{}
 		}
 
 		if isPage {
@@ -126,5 +117,5 @@ func readInput() ([][]int, [][]int, error) {
 		}
 	}
 
-	return rules, pages, nil
+	return rulesMap, pages, nil
 }
