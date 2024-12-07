@@ -44,7 +44,8 @@ func canFormTarget(target int, nums []int) bool {
 		}
 
 		return dfs(index+1, current*nums[index]) ||
-			dfs(index+1, current+nums[index]) || dfs(index+1, concetenateNumber(current, nums[index]))
+			dfs(index+1, current+nums[index]) ||
+			dfs(index+1, concetenateNumber(current, nums[index]))
 	}
 
 	return dfs(1, nums[0])
