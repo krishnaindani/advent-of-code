@@ -44,10 +44,20 @@ func canFormTarget(target int, nums []int) bool {
 		}
 
 		return dfs(index+1, current*nums[index]) ||
-			dfs(index+1, current+nums[index])
+			dfs(index+1, current+nums[index]) || dfs(index+1, concetenateNumber(current, nums[index]))
 	}
 
 	return dfs(1, nums[0])
+}
+
+func concetenateNumber(num1, num2 int) int {
+
+	num1Str := strconv.Itoa(num1)
+	num2Str := strconv.Itoa(num2)
+
+	combinedNUms := num1Str + num2Str
+	num, _ := strconv.Atoi(combinedNUms)
+	return num
 }
 
 func readInput() (map[int][]int, error) {
