@@ -7,22 +7,20 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func main() {
-	t := time.Now()
 	input, err := readInput()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println("computeCheckSum: ", computeCheckSum(input))
-	fmt.Println(time.Since(t))
 }
 
 func computeCheckSum(nums []int) int {
 	block := getBlock(nums)
+	fmt.Println(block)
 	return getCheckSumResult(block)
 }
 
@@ -88,7 +86,7 @@ func buildEmptyBlock(frequency int) []int {
 
 func readInput() ([]int, error) {
 
-	file, err := os.Open("data.txt")
+	file, err := os.Open("sampleData.txt")
 	if err != nil {
 		fmt.Printf("Couldn't open file: %v\n", err)
 		return nil, err
