@@ -3,13 +3,16 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/krishnaindani/advent-of-code/utils"
 	"log"
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func main() {
+	defer utils.TimeTrack(time.Now())
 	input, err := readInput()
 	if err != nil {
 		log.Fatal(err)
@@ -20,30 +23,106 @@ func main() {
 
 func computeCheckSum(nums []int) int {
 	block := getBlock(nums)
-	fmt.Println(block)
 	return getCheckSumResult(block)
 }
 
 func getCheckSumResult(nums []int) int {
-	result := 0
-	left := 0
-	right := len(nums) - 1
-	i := 0
 
-	for left < right {
-		if nums[left] == -1 {
-			for nums[right] == -1 {
-				right -= 1
+	maxFileId := -1
+	n := len(nums) - 1
+
+	for _, block := range nums {
+		if block > maxFileId {
+			maxFileId = block
+		}
+	}
+
+	for fileID := maxFileId; fileID >= 0; fileID-- {
+
+		fileEndPos := -1
+		//find the file position
+		for i := n; i >= 0; i-- {
+			if nums[i] == fileID {
+				fileEndPos = i
+				break
 			}
-			nums[left], nums[right] = nums[right], nums[left]
 		}
 
-		result += i * nums[left]
-		left += 1
-		i++
+		if fileEndPos == -1 {
+			continue
+		}
+
+		fileStartPos := findFileStartPosition(fileEndPos, nums)
+		fileSize := fileEndPos - fileStartPos + 1
+
+		bestFreeSpace := -1
+
+		for i := 0; i < fileStartPos; i++ {
+			if nums[i] == -1 {
+				freeSize := findFreeSpaceSize(i, nums)
+				if freeSize >= fileSize {
+					bestFreeSpace = i
+					break
+				}
+			}
+		}
+
+		if bestFreeSpace != -1 {
+			moveFile(&nums, bestFreeSpace, fileStartPos, fileSize)
+		}
+	}
+
+	return calculateCheckSum(nums)
+}
+
+func calculateCheckSum(nums []int) int {
+
+	result := 0
+
+	for i, num := range nums {
+		if num != -1 {
+			result += i * num
+		}
 	}
 
 	return result
+}
+
+func moveFile(nums *[]int, freeSizeStartPos, fileStartPos, size int) *[]int {
+
+	id := (*nums)[fileStartPos]
+
+	for i := fileStartPos; i < fileStartPos+size; i++ {
+		(*nums)[i] = -1
+	}
+
+	for i := freeSizeStartPos; i < freeSizeStartPos+size; i++ {
+		(*nums)[i] = id
+	}
+
+	return nil
+}
+
+func findFreeSpaceSize(position int, nums []int) int {
+	size := 0
+
+	for i := position; i < len(nums) && nums[i] == -1; i++ {
+		size += 1
+	}
+
+	return size
+}
+
+func findFileStartPosition(pos int, nums []int) int {
+
+	fileId := nums[pos]
+	start := pos
+
+	for start >= 0 && nums[start] == fileId {
+		start -= 1
+	}
+
+	return start + 1
 }
 
 func getBlock(nums []int) []int {
@@ -86,7 +165,7 @@ func buildEmptyBlock(frequency int) []int {
 
 func readInput() ([]int, error) {
 
-	file, err := os.Open("sampleData.txt")
+	file, err := os.Open("data.txt")
 	if err != nil {
 		fmt.Printf("Couldn't open file: %v\n", err)
 		return nil, err
