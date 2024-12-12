@@ -20,10 +20,10 @@ func main() {
 	}
 
 	//fmt.Println("input:", input)
-	fmt.Println("getTrailHeadsScore:", getTrailHeadsScore(input))
+	fmt.Println("getTrailHeadsScore:", getRatingsScore(input))
 }
 
-func getTrailHeadsScore(trails [][]int) int {
+func getRatingsScore(trails [][]int) int {
 
 	count := 0
 	m := len(trails)
@@ -32,7 +32,7 @@ func getTrailHeadsScore(trails [][]int) int {
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
 			if trails[i][j] == 0 {
-				count += getTrailHeadScore(Position{
+				count += getRatingScore(Position{
 					i, j,
 				}, trails, make(map[Position]bool))
 			}
@@ -48,7 +48,7 @@ func IsCoordinatesValid(x, y int, trails [][]int) bool {
 	return (x >= 0 && x < m) && (y >= 0 && y < n)
 }
 
-func getTrailHeadScore(pos Position, trails [][]int, visited map[Position]bool) int {
+func getRatingScore(pos Position, trails [][]int, visited map[Position]bool) int {
 
 	if trails[pos.x][pos.y] == 9 {
 		return 1
@@ -69,7 +69,7 @@ func getTrailHeadScore(pos Position, trails [][]int, visited map[Position]bool) 
 		if IsCoordinatesValid(dx, dy, trails) &&
 			!visited[Position{dx, dy}] &&
 			trails[dx][dy] == trails[pos.x][pos.y]+1 {
-			count += getTrailHeadScore(Position{dx, dy}, trails, visited)
+			count += getRatingScore(Position{dx, dy}, trails, visited)
 		}
 	}
 
