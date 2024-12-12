@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
-	//"github.com/krishnaindani/advent-of-code/utils"
+	"github/krishnaindani/advent-of-code/utils"
+	"time"
+
 	"log"
 	"os"
 	"strconv"
@@ -11,13 +13,13 @@ import (
 )
 
 func main() {
-	//defer utils.TimeTrack(time.Now())
+	defer utils.TimeTrack(time.Now())
 	input, err := readInput()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("computeCheckSum: ", computeCheckSum(input))
+	fmt.Println("computeCheckSum:", computeCheckSum(input))
 }
 
 func computeCheckSum(nums []int) int {
