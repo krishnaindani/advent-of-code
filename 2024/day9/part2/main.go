@@ -3,16 +3,15 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/krishnaindani/advent-of-code/utils"
+	//"github.com/krishnaindani/advent-of-code/utils"
 	"log"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func main() {
-	defer utils.TimeTrack(time.Now())
+	//defer utils.TimeTrack(time.Now())
 	input, err := readInput()
 	if err != nil {
 		log.Fatal(err)
