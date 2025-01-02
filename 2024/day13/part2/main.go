@@ -27,7 +27,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	//fmt.Println("input", input)
 	fmt.Println("tokensNeeded: ", calculateTokens(input))
 }
 
@@ -51,21 +51,7 @@ func calculateUsingCarmersRule(clawMachine ClawMachine) int {
 		return 0
 	}
 
-	return 3*(d1/d) + d2/d
-}
-
-func calculateTokenForMachine(clawMachine ClawMachine) int {
-
-	for a := 0; a <= 100; a++ {
-		for b := 0; b <= 100; b++ {
-			if (a*clawMachine.ButtonA.x+b*clawMachine.ButtonB.x) == clawMachine.Prize.x &&
-				(a*clawMachine.ButtonA.y+b*clawMachine.ButtonB.y) == clawMachine.Prize.y {
-				return a*3 + b
-			}
-		}
-	}
-
-	return 0
+	return (3 * (d1 / d)) + (d2 / d)
 }
 
 func readInput() (map[int]ClawMachine, error) {
@@ -115,7 +101,7 @@ func readInput() (map[int]ClawMachine, error) {
 			yNum := strings.Split(yStr, "Y=")[1]
 			xInt, _ := strconv.Atoi(xNum)
 			yInt, _ := strconv.Atoi(yNum)
-			clawMachine.Prize = Coordinates{xInt, yInt}
+			clawMachine.Prize = Coordinates{xInt + 10000000000000, yInt + 10000000000000}
 			out[id] = clawMachine
 			id += 1
 
